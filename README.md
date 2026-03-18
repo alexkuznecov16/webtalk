@@ -1,4 +1,4 @@
-# SyncChat 💬
+# WebTalk 💬
 
 Minimal social chat platform built with **Next.js** and **Supabase**.
 
@@ -57,8 +57,8 @@ src/
 ## 🚀 Getting Started
 
 ```bash
-git clone https://github.com/your-username/syncchat.git
-cd syncchat
+git clone https://github.com/your-username/WebTalk.git
+cd WebTalk
 npm install
 ```
 
