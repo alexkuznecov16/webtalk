@@ -79,4 +79,15 @@ including authentication, realtime features, and scalable architecture.
 
 ## 📄 License
 
-MIT
+This project is licensed under the **MIT License**.
+
+It is primarily built for learning and experimentation, but you are free to use, modify, and distribute it for personal purposes.
+
+---
+
+## 📬 Contact
+
+- 💬 Telegram — https://t.me/kznws111
+- 📧 Email — alexander.kuznecov16@gmail.com
+
+Open for feedback, ideas, and collaboration.
