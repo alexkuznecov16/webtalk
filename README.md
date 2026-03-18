@@ -26,57 +26,6 @@ A lightweight project focused on usernames, direct messaging, and clean UI inspi
 
 ---
 
-## 📁 Project Structure
-
-```
-src/
-  app/
-    (public)/        # Landing + auth pages
-    (app)/           # Protected app (after login)
-    layout.tsx       # Root layout
-
-  components/
-    landing/         # Landing UI (Header, Hero, About, Footer)
-    auth/            # Auth forms
-    layout/          # App shell (sidebar, layout)
-    chat/            # Chat UI
-    ui/              # Reusable components
-
-  lib/
-    supabase/        # Supabase clients (client/server)
-
-  services/          # Business logic (auth, chats, messages)
-
-  hooks/             # Custom React hooks
-
-  types/             # TypeScript types
-```
-
----
-
-## 🚀 Getting Started
-
-```bash
-git clone https://github.com/your-username/WebTalk.git
-cd WebTalk
-npm install
-```
-
-Create `.env.local`:
-
-```
-NEXT_PUBLIC_SUPABASE_URL=your_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_key
-```
-
-Run the dev server:
-
-```bash
-npm run dev
-```
-
----
-
 ## 🔑 Core Concept
 
 Each user:
