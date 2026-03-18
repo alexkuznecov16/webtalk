@@ -1,36 +1,133 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SyncChat 💬
 
-## Getting Started
+Minimal social chat platform built with **Next.js** and **Supabase**.
 
-First, run the development server:
+A lightweight project focused on usernames, direct messaging, and clean UI inspired by modern messengers.
+
+---
+
+## ✨ Features
+
+- 🔐 Authentication (login / register)
+- 👤 User profiles with unique `@username`
+- 🔍 Search users by username
+- 💬 Direct 1-to-1 chats
+- ⚡ Realtime messaging (planned)
+- 🧩 Clean modular architecture
+
+---
+
+## 🧱 Tech Stack
+
+- **Next.js (App Router)**
+- **TypeScript**
+- **Supabase (Auth + Database + Realtime)**
+- **SCSS Modules**
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+  app/
+    (public)/        # Landing + auth pages
+    (app)/           # Protected app (after login)
+    layout.tsx       # Root layout
+
+  components/
+    landing/         # Landing UI (Header, Hero, About, Footer)
+    auth/            # Auth forms
+    layout/          # App shell (sidebar, layout)
+    chat/            # Chat UI
+    ui/              # Reusable components
+
+  lib/
+    supabase/        # Supabase clients (client/server)
+
+  services/          # Business logic (auth, chats, messages)
+
+  hooks/             # Custom React hooks
+
+  types/             # TypeScript types
+```
+
+---
+
+## 🚀 Getting Started
+
+```bash
+git clone https://github.com/your-username/syncchat.git
+cd syncchat
+npm install
+```
+
+Create `.env.local`:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=your_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_key
+```
+
+Run the dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🔑 Core Concept
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Each user:
 
-## Learn More
+- has a **name**
+- has a unique **@username**
+- can be found via search
+- can start a **direct chat**
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠 Roadmap
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- [ ] Auth (register/login)
+- [ ] Profiles (username system)
+- [ ] User search
+- [ ] Chat creation (find or create)
+- [ ] Messaging UI
+- [ ] Realtime updates
+- [ ] Settings page
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📌 Notes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `@username` is stored without `@` in the database
+- All usernames are lowercase and unique
+- Direct chats are unique per user pair
+
+---
+
+## 🧠 Philosophy
+
+Keep it:
+
+- simple
+- fast
+- clean
+- scalable
+
+No overengineering — just solid fundamentals.
+
+## 🎓 Project Status
+
+This project is built for learning and experimentation.
+
+The goal is to explore modern fullstack development with Next.js and Supabase,
+including authentication, realtime features, and scalable architecture.
+
+---
+
+## 📄 License
+
+MIT

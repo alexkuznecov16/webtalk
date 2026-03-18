@@ -1,0 +1,140 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: 100%;
+  backdrop-filter: blur(18px);
+  background: rgba(10, 14, 24, 0.72);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.logoMark {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 18px;
+  color: #fff;
+  background: linear-gradient(135deg, #37aee2 0%, #6f7cff 50%, #8f5dff 100%);
+  box-shadow:
+    0 10px 30px rgba(55, 174, 226, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.logoText {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f5f7ff;
+  letter-spacing: -0.02em;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+
+  a {
+    text-decoration: none;
+    color: rgba(240, 244, 255, 0.82);
+    font-size: 15px;
+    transition:
+      color 0.2s ease,
+      transform 0.2s ease;
+
+    &:hover {
+      color: #ffffff;
+      transform: translateY(-1px);
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.login,
+.cta {
+  text-decoration: none;
+  border-radius: 14px;
+  padding: 11px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: 0.25s ease;
+}
+
+.login {
+  color: #e9edff;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+.cta {
+  color: #fff;
+  background: linear-gradient(135deg, #37aee2 0%, #5b7cff 100%);
+  box-shadow: 0 10px 25px rgba(55, 174, 226, 0.28);
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 14px 34px rgba(55, 174, 226, 0.36);
+  }
+}
+
+@media (max-width: 900px) {
+  .nav {
+    display: none;
+  }
+
+  .container {
+    padding: 14px 16px;
+  }
+
+  .logoText {
+    font-size: 18px;
+  }
+
+  .login,
+  .cta {
+    padding: 10px 14px;
+  }
+}
+
+@media (max-width: 520px) {
+  .actions {
+    gap: 8px;
+  }
+
+  .login {
+    display: none;
+  }
+
+  .logoMark {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+  }
+}
