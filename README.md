@@ -61,21 +61,6 @@ Each chat:
 
 ---
 
-## 🏗 Architecture
-
-```
-/context
-  DatabaseContext.tsx   // data layer (auth, chats, messages)
-
-/components
-  /sidebar              // chat list + search
-  /content              // chat UI
-  /search               // user search
-
-/app
-  /home                 // main chat page
-```
-
 ### Key ideas:
 
 - **Context = data layer**
