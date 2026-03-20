@@ -1,19 +1,23 @@
 # WebTalk 💬
 
-Minimal social chat platform built with **Next.js** and **Supabase**.
+Minimal real-time chat platform built with **Next.js** and **Supabase**.
 
-A lightweight project focused on usernames, direct messaging, and clean UI inspired by modern messengers.
+A lightweight but production-oriented project focused on **direct messaging**,  
+**clean architecture**, and **modern UX patterns**.
 
 ---
 
 ## ✨ Features
 
-- 🔐 Authentication (login / register)
+- 🔐 Authentication (email + password)
 - 👤 User profiles with unique `@username`
 - 🔍 Search users by username
-- 💬 Direct 1-to-1 chats
-- ⚡ Realtime messaging (planned)
-- 🧩 Clean modular architecture
+- 💬 Direct 1-to-1 chats (auto create / reuse)
+- ⚡ **Realtime messaging (Supabase Realtime)**
+- 📬 Live updates (messages, sidebar, last message, unread count)
+- 🧠 Smart chat logic (no duplicates, find-or-create)
+- 🎯 Optimistic UI (instant message sending)
+- 🧩 Clean modular architecture (context + components)
 
 ---
 
@@ -21,12 +25,15 @@ A lightweight project focused on usernames, direct messaging, and clean UI inspi
 
 - **Next.js (App Router)**
 - **TypeScript**
-- **Supabase (Auth + Database + Realtime)**
+- **Supabase**
+  - Auth
+  - Postgres DB
+  - Realtime subscriptions
 - **SCSS Modules**
 
 ---
 
-## 🔑 Core Concept
+## 🧠 Core Concepts
 
 Each user:
 
@@ -35,45 +42,96 @@ Each user:
 - can be found via search
 - can start a **direct chat**
 
+Each chat:
+
+- is **unique between two users**
+- is created automatically if it doesn't exist
+- updates in **realtime**
+- maintains **last message + unread count**
+
+---
+
+## ⚡ Realtime Architecture
+
+- Uses **Supabase Realtime (Postgres changes)**
+- Subscriptions:
+  - `messages INSERT` → updates chat messages instantly
+  - `messages INSERT` → updates sidebar (lastMessage + unread)
+- No polling, no refresh — fully reactive UI
+
+---
+
+## 🏗 Architecture
+
+```
+/context
+  DatabaseContext.tsx   // data layer (auth, chats, messages)
+
+/components
+  /sidebar              // chat list + search
+  /content              // chat UI
+  /search               // user search
+
+/app
+  /home                 // main chat page
+```
+
+### Key ideas:
+
+- **Context = data layer**
+- **Components = pure UI**
+- **Supabase = backend (no custom server)**
+
+---
+
+## 🚀 Implemented Logic
+
+- Find or create chat (no duplicates)
+- Local state sync + realtime merge
+- Optimistic message sending
+- Live sidebar updates
+- Unread counter logic
+- Auto sorting by last message
+- Local chat selection persistence
+
 ---
 
 ## 🛠 Roadmap
 
-- [ ] Auth (register/login)
-- [ ] Profiles (username system)
-- [ ] User search
-- [ ] Chat creation (find or create)
-- [ ] Messaging UI
-- [ ] Realtime updates
+- [x] Auth (register / login)
+- [x] Profiles + username system
+- [x] User search
+- [x] Chat creation (find or create)
+- [x] Messaging UI
+- [x] **Realtime updates**
+- [x] Sidebar live sync
+- [ ] Message read status sync (DB-level)
+- [ ] Image upload (storage)
+- [ ] Group chats
+- [ ] Notifications
 - [ ] Settings page
 
 ---
 
 ## 📌 Notes
 
-- `@username` is stored without `@` in the database
-- All usernames are lowercase and unique
-- Direct chats are unique per user pair
+- `@username` stored **without `@`**
+- usernames are **lowercase + unique**
+- chats are **1-to-1 only (for now)**
+- realtime is handled via **Supabase channels**
 
 ---
 
-## 🧠 Philosophy
-
-Keep it:
-
-- simple
-- fast
-- clean
-- scalable
-
-No overengineering — just solid fundamentals.
-
 ## 🎓 Project Status
 
-This project is built for learning and experimentation.
+This project is built for **learning + real-world practice**.
 
-The goal is to explore modern fullstack development with Next.js and Supabase,
-including authentication, realtime features, and scalable architecture.
+Focus areas:
+
+- fullstack architecture (frontend + BaaS)
+- realtime systems
+- scalable state management
+- clean UI/UX patterns
 
 ---
 

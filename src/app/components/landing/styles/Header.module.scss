@@ -9,54 +9,35 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 16px 24px;
+.headerContainer {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-}
+  flex-wrap: wrap;
+  gap: clamp(10px, 2vw, 20px);
+  padding-block: clamp(12px, 1.6vw, 16px);
 
-.logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  text-decoration: none;
-}
-
-.logoMark {
-  width: 40px;
-  height: 40px;
-  border-radius: 14px;
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-  font-size: 18px;
-  color: #fff;
-  background: linear-gradient(135deg, #37aee2 0%, #6f7cff 50%, #8f5dff 100%);
-  box-shadow:
-    0 10px 30px rgba(55, 174, 226, 0.35),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-.logoText {
-  font-size: 20px;
-  font-weight: 700;
-  color: #f5f7ff;
-  letter-spacing: -0.02em;
+  @media screen and (max-width: 400px) {
+    .headerContainer {
+      justify-content: center;
+    }
+  }
 }
 
 .nav {
   display: flex;
   align-items: center;
-  gap: 28px;
+  justify-content: center;
+  gap: clamp(12px, 2vw, 28px);
+  flex: 1 1 auto;
+  min-width: 0;
+  flex-wrap: wrap;
 
   a {
     text-decoration: none;
     color: rgba(240, 244, 255, 0.82);
-    font-size: 15px;
+    font-size: clamp(13px, 1.2vw, 15px);
+    white-space: nowrap;
     transition:
       color 0.2s ease,
       transform 0.2s ease;
@@ -71,7 +52,11 @@
 .actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: flex-end;
+  gap: clamp(8px, 1vw, 12px);
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  min-width: 0;
 }
 
 .login,
@@ -110,7 +95,7 @@
     display: none;
   }
 
-  .container {
+  .headerContainer {
     padding: 14px 16px;
   }
 

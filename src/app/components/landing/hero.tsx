@@ -9,7 +9,7 @@ export default function Hero() {
 
       <div className={styles.container}>
         <div className={styles.left}>
-          <div className={styles.badge}>Fast. Private. Minimal.</div>
+          <div className="landing-pill landing-pill--soft">Fast. Private. Minimal.</div>
 
           <h1 className={styles.title}>
             Build your own
@@ -26,10 +26,10 @@ export default function Hero() {
           </p>
 
           <div className={styles.buttons}>
-            <Link href="/auth" className={styles.primary}>
+            <Link href="/auth" className="landing-btn landing-btn--md landing-btn--primary">
               Create account
             </Link>
-            <Link href="#about" className={styles.secondary}>
+            <Link href="#about" className="landing-btn landing-btn--md landing-btn--ghost">
               See how it works
             </Link>
           </div>
@@ -64,7 +64,7 @@ export default function Hero() {
             <div className={styles.chatArea}>
               <div className={styles.search}>Search by @username</div>
 
-              <div className={styles.card}>
+              <div className={`${styles.card} landing-glass`}>
                 <div className={styles.avatar}>A</div>
                 <div>
                   <h4>@alexdev</h4>

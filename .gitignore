@@ -1,5 +1,6 @@
 .prettierrc
 .prettierignore
+.hintrc
 
 # dependencies
 /node_modules

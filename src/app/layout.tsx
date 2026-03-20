@@ -1,9 +1,22 @@
+import type { Metadata } from 'next';
 import './globals.scss';
+import { DatabaseProvider } from '@/context/DatabaseContext';
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const metadata: Metadata = {
+  title: 'WebTalk',
+  description: 'Minimal social messaging platform',
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html lang="en">
-      <body>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body suppressHydrationWarning>
+        <DatabaseProvider>{children}</DatabaseProvider>
+      </body>
     </html>
   );
 }

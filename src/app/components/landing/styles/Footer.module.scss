@@ -21,7 +21,7 @@
   h4 {
     margin: 0 0 4px;
     color: #f6f9ff;
-    font-size: 16px;
+    font-size: 1rem;
   }
 
   p {
@@ -31,26 +31,14 @@
   }
 }
 
-.logo {
-  width: 42px;
-  height: 42px;
-  border-radius: 14px;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(135deg, #37aee2 0%, #6f7cff 100%);
-  color: #fff;
-  font-weight: 800;
-  box-shadow: 0 12px 28px rgba(55, 174, 226, 0.24);
-}
-
-.links {
+.navLinks {
   display: flex;
   gap: 18px;
 
   a {
     text-decoration: none;
     color: rgba(234, 239, 255, 0.74);
-    font-size: 14px;
+    font-size: 0.9rem;
     transition: color 0.2s ease;
 
     &:hover {
@@ -61,7 +49,7 @@
 
 .copy {
   color: rgba(211, 220, 245, 0.52);
-  font-size: 13px;
+  font-size: 0.7rem;
   text-align: right;
 }
 

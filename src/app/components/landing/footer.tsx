@@ -6,20 +6,22 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={styles.container}>
         <div className={styles.brand}>
-          <div className={styles.logo}>S</div>
-          <div>
-            <h4>WebTalk</h4>
-            <p>Minimal social messaging platform</p>
+          <div className="landing-logo landing-logo--sm">
+            <div className="landing-logo__mark">WT</div>
+            <div>
+              <div className="landing-logo__text">WebTalk</div>
+              <p className={styles.brandSubtitle}>Minimal social messaging platform</p>
+            </div>
           </div>
         </div>
 
-        <div className={styles.links}>
-          <Link href="/">Home</Link>
+        <div className={styles.navLinks}>
+          <Link href="/home">Home</Link>
           <Link href="#about">About</Link>
           <Link href="/auth">Auth</Link>
         </div>
 
-        <div className={styles.copy}>© 2025 WebTalk. Built with Next.js + Supabase.</div>
+        <div className={styles.copy}>© 2026 WebTalk. Built with Next.js + Supabase.</div>
       </div>
     </footer>
   );

@@ -5,7 +5,7 @@ export default function About() {
     <section className={styles.about} id="about">
       <div className={styles.container}>
         <div className={styles.heading}>
-          <span className={styles.kicker}>About platform</span>
+          <span className="landing-pill landing-pill--accent">About platform</span>
           <h2>Everything you need for a small social messenger</h2>
           <p>
             Clean onboarding, unique usernames, quick account search and a lightweight chat system
@@ -14,7 +14,7 @@ export default function About() {
         </div>
 
         <div className={styles.grid} id="features">
-          <article className={styles.card}>
+          <article className={`${styles.card} landing-glass--strong`}>
             <div className={styles.icon}>@</div>
             <h3>Unique usernames</h3>
             <p>

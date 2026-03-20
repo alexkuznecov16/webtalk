@@ -4,10 +4,10 @@ import styles from './styles/Header.module.scss';
 export default function Header() {
   return (
     <header className={styles.header}>
-      <div className={styles.container}>
-        <Link href="/" className={styles.logo}>
-          <div className={styles.logoMark}>WT</div>
-          <span className={styles.logoText}>WebTalk</span>
+      <div className={`${styles.headerContainer} landing-container`}>
+        <Link href="/" className="landing-logo landing-logo--md">
+          <div className="landing-logo__mark">WT</div>
+          <span className="landing-logo__text">WebTalk</span>
         </Link>
 
         <nav className={styles.nav}>
@@ -17,10 +17,10 @@ export default function Header() {
         </nav>
 
         <div className={styles.actions}>
-          <Link href="/auth" className={styles.login}>
+          <Link href="/auth" className="landing-btn landing-btn--sm landing-btn--soft">
             Log in
           </Link>
-          <Link href="/auth" className={styles.cta}>
+          <Link href="/auth" className="landing-btn landing-btn--sm landing-btn--primary">
             Get started
           </Link>
         </div>

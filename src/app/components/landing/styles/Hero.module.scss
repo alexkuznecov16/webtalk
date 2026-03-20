@@ -1,7 +1,7 @@
 .hero {
   position: relative;
   overflow: hidden;
-  min-height: calc(100vh - 73px);
+  min-height: calc(100dvh - 73px);
   background:
     radial-gradient(circle at top left, rgba(55, 174, 226, 0.12), transparent 34%),
     radial-gradient(circle at bottom right, rgba(101, 80, 255, 0.18), transparent 28%),
@@ -50,19 +50,6 @@
   align-items: flex-start;
 }
 
-.badge {
-  display: inline-flex;
-  align-items: center;
-  padding: 10px 14px;
-  border-radius: 999px;
-  color: #dce9ff;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 22px;
-}
-
 .title {
   margin: 0;
   max-width: 680px;
@@ -106,27 +93,6 @@
   transition: 0.25s ease;
 }
 
-.primary {
-  color: #fff;
-  background: linear-gradient(135deg, #37aee2 0%, #5b7cff 100%);
-  box-shadow: 0 14px 35px rgba(55, 174, 226, 0.28);
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 18px 45px rgba(55, 174, 226, 0.38);
-  }
-}
-
-.secondary {
-  color: #e7ecff;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-
-  &:hover {
-    background: rgba(255, 255, 255, 0.08);
-  }
-}
-
 .meta {
   margin-top: 36px;
   display: grid;
@@ -157,9 +123,13 @@
 .right {
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .phone {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
   width: min(100%, 420px);
   border-radius: 34px;
   padding: 14px;
@@ -208,7 +178,6 @@
 
 .search,
 .input {
-  // width: 100%;
   padding: 14px 16px;
   border-radius: 16px;
   color: rgba(232, 238, 255, 0.6);
@@ -289,10 +258,6 @@
 
   .right {
     justify-content: flex-start;
-  }
-
-  .meta {
-    grid-template-columns: 1fr;
   }
 
   .phone {

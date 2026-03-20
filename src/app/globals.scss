@@ -4,8 +4,10 @@ $font-main: 'Poppins', sans-serif;
   padding: 0;
   margin: 0;
   outline: none;
+  text-decoration: none;
 }
 
 body {
   font-family: $font-main;
+  min-height: 100dvh;
 }
