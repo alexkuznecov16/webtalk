@@ -24,7 +24,16 @@ export type SidebarChatItem = {
   unreadcount: number;
 };
 
+type SidebarMyInfo = {
+  id: string;
+  email: string | null;
+  name: string;
+  username: string;
+  avatar_url: string | null;
+} | null;
+
 type SidebarProps = {
+  myInfo: SidebarMyInfo;
   accounts: SearchParticipant[];
   chats: SidebarChatItem[];
   activeChatId?: string;
@@ -62,6 +71,7 @@ function formatMessageTime(dateString: string | undefined) {
 }
 
 export default function Sidebar({
+  myInfo,
   accounts,
   chats,
   activeChatId,
@@ -76,9 +86,23 @@ export default function Sidebar({
           <p className={styles.subtitle}>Your chats</p>
         </div>
 
-        <button type="button" className={styles.newChatButton}>
-          +
-        </button>
+        <div className={styles.profileBadge}>
+          <div className={styles.avatarWrap}>
+            {myInfo?.avatar_url ? (
+              <Image
+                width={56}
+                height={56}
+                src={myInfo.avatar_url}
+                alt={myInfo.name}
+                className={styles.avatarImage}
+              />
+            ) : (
+              <div className={styles.avatarFallback}>{getInitials(myInfo?.name ?? 'Me')}</div>
+            )}
+          </div>
+
+          <span className={styles.chatUsername}>@{myInfo?.username ?? 'me'}</span>
+        </div>
       </div>
 
       <Search

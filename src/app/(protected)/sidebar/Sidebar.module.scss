@@ -282,6 +282,14 @@
   }
 }
 
+.profileBadge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
 @media (max-width: 900px) {
   .sidebar {
     max-width: 100%;

@@ -17,6 +17,7 @@ export default function Home() {
   const pendingOptimisticIdsRef = useRef<string[]>([]);
 
   const {
+    profile,
     chats,
     getChats,
     accounts,
@@ -204,6 +205,7 @@ export default function Home() {
     <div className={`${styles.chatPage} ${selectedChatId ? styles.hasActiveChat : ''}`}>
       <div className={styles.sidebarSection}>
         <Sidebar
+          myInfo={profile}
           accounts={accounts}
           chats={sidebarChats}
           activeChatId={selectedChatId || undefined}
