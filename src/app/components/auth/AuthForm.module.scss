@@ -11,6 +11,12 @@
   justify-content: center;
 }
 
+.authContainer {
+  max-width: 1200px;
+  padding: 0 10px;
+  margin: 0 auto;
+}
+
 .bgGlowOne,
 .bgGlowTwo {
   position: absolute;
@@ -36,6 +42,9 @@
 }
 
 .authWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
   z-index: 1;
   width: 100%;
@@ -70,6 +79,7 @@
 }
 
 .authCard {
+  width: max-content;
   position: relative;
   border-radius: 30px;
   padding: 28px;
@@ -91,7 +101,7 @@
   h1 {
     margin: 14px 0 10px;
     color: #f8faff;
-    font-size: clamp(30px, 4vw, 40px);
+    font-size: clamp(20px, 4vw, 40px);
     line-height: 1.05;
     letter-spacing: -0.04em;
   }
@@ -262,48 +272,6 @@
   }
 }
 
-.error {
-  margin: -4px 0 0;
-  color: #ff8f9d;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-@media (max-width: 640px) {
-  .authCard {
-    padding: 22px 16px 18px;
-    border-radius: 24px;
-  }
-
-  .authHeader {
-    h1 {
-      margin-top: 12px;
-    }
-
-    p {
-      font-size: 14px;
-    }
-  }
-
-  .field {
-    input {
-      padding: 15px 16px;
-      border-radius: 16px;
-    }
-  }
-
-  .primaryButton {
-    border-radius: 16px;
-    padding: 15px 18px;
-  }
-
-  .switcher {
-    button {
-      padding: 12px 14px;
-    }
-  }
-}
-
 .inputError {
   border-color: rgba(255, 95, 122, 0.7) !important;
   box-shadow: 0 0 0 4px rgba(255, 95, 122, 0.12) !important;
@@ -346,4 +314,141 @@
   border-radius: 999px;
   background: currentColor;
   opacity: 0.9;
+}
+
+@media (max-width: 640px) {
+  .authSection {
+    align-items: center;
+    padding: 20px 0;
+  }
+
+  .authWrapper {
+    max-width: 100%;
+  }
+
+  .authCard {
+    padding: 18px 14px 16px;
+    border-radius: 22px;
+  }
+
+  .authHeader {
+    margin-bottom: 18px;
+
+    h1 {
+      margin: 10px 0 8px;
+      font-size: 28px;
+      line-height: 1.08;
+    }
+
+    p {
+      font-size: 13px;
+      line-height: 1.5;
+    }
+  }
+
+  .authBrand {
+    margin-bottom: 14px;
+    gap: 10px;
+    font-size: 18px;
+  }
+
+  .logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    font-size: 16px;
+  }
+
+  .switcher {
+    margin-bottom: 16px;
+    gap: 6px;
+    padding: 5px;
+
+    button {
+      padding: 11px 12px;
+      font-size: 13px;
+    }
+  }
+
+  .form {
+    gap: 13px;
+  }
+
+  .field {
+    gap: 3px;
+
+    label {
+      font-size: 13px;
+    }
+
+    input {
+      padding: 8px 16px;
+      border-radius: 14px;
+      font-size: 14px;
+    }
+  }
+
+  .primaryButton {
+    padding: 14px 16px;
+    border-radius: 14px;
+    font-size: 14px;
+  }
+
+  .passwordHints {
+    gap: 0;
+    padding: 8px 10px;
+    border-radius: 14px;
+  }
+
+  .passwordHint {
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .bottomText {
+    margin-top: 2px;
+
+    span,
+    button {
+      font-size: 13px;
+    }
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .authCard {
+    max-width: 333px;
+  }
+}
+
+@media screen and (max-width: 370px) {
+  .authCard {
+    max-width: 233px;
+  }
+
+  .authHeader {
+    h1 {
+      font-size: 22px;
+    }
+    p {
+      font-size: 10px;
+    }
+  }
+
+  .authBrand {
+    span {
+      font-size: 13px;
+    }
+
+    .logo {
+      width: 30px;
+      height: 30px;
+      font-size: 12px;
+    }
+  }
+
+  .switcher button {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
 }

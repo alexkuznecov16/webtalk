@@ -13,44 +13,46 @@ export default function AuthForm() {
       <div className={styles.bgGlowOne} />
       <div className={styles.bgGlowTwo} />
 
-      <div className={styles.authWrapper}>
-        <div className={styles.authCard}>
-          <div className={styles.authHeader}>
-            <div className={styles.authBrand}>
-              <div className={styles.logo}>WT</div>
-              <span>WebTalk</span>
+      <div className={styles.authContainer}>
+        <div className={styles.authWrapper}>
+          <div className={styles.authCard}>
+            <div className={styles.authHeader}>
+              <div className={styles.authBrand}>
+                <div className={styles.logo}>WT</div>
+                <span>WebTalk</span>
+              </div>
+              <h1>{mode === 'login' ? 'Welcome back' : 'Create your account'}</h1>
+              <p>
+                {mode === 'login'
+                  ? 'Log in with your nickname or email and continue chatting.'
+                  : 'Register with your email and password to get started.'}
+              </p>
             </div>
-            <h1>{mode === 'login' ? 'Welcome back' : 'Create your account'}</h1>
-            <p>
-              {mode === 'login'
-                ? 'Log in with your nickname or email and continue chatting.'
-                : 'Register with your email and password to get started.'}
-            </p>
+
+            <div className={styles.switcher}>
+              <button
+                type="button"
+                className={mode === 'login' ? styles.switcherActive : ''}
+                onClick={() => setMode('login')}
+              >
+                Log in
+              </button>
+
+              <button
+                type="button"
+                className={mode === 'register' ? styles.switcherActive : ''}
+                onClick={() => setMode('register')}
+              >
+                Register
+              </button>
+            </div>
+
+            {mode === 'login' ? (
+              <LoginForm onSwitchToRegister={() => setMode('register')} />
+            ) : (
+              <RegisterForm onSwitchToLogin={() => setMode('login')} />
+            )}
           </div>
-
-          <div className={styles.switcher}>
-            <button
-              type="button"
-              className={mode === 'login' ? styles.switcherActive : ''}
-              onClick={() => setMode('login')}
-            >
-              Log in
-            </button>
-
-            <button
-              type="button"
-              className={mode === 'register' ? styles.switcherActive : ''}
-              onClick={() => setMode('register')}
-            >
-              Register
-            </button>
-          </div>
-
-          {mode === 'login' ? (
-            <LoginForm onSwitchToRegister={() => setMode('register')} />
-          ) : (
-            <RegisterForm onSwitchToLogin={() => setMode('login')} />
-          )}
         </div>
       </div>
     </section>
