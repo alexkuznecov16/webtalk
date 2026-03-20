@@ -249,7 +249,11 @@ export default function Content({
                             height={320}
                             className={styles.messageImage}
                           />
-                          <span onClick={(e) => handleDownload(e, message.image_url)}>
+                          <span
+                            onClick={(e) =>
+                              message.image_url && handleDownload(e, message.image_url)
+                            }
+                          >
                             ⬇ Download
                           </span>
                         </div>

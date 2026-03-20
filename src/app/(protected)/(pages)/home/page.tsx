@@ -102,14 +102,16 @@ export default function Home() {
       return;
     }
 
+    const chatId = selectedChatId;
+
     async function loadMessages() {
-      const data = await getMessages(selectedChatId);
+      const data = await getMessages(chatId);
       setMessages(data);
-      clearChatUnread(selectedChatId);
+      clearChatUnread(chatId);
     }
 
     void loadMessages();
-  }, [selectedChatId]);
+  }, [selectedChatId, getMessages, clearChatUnread]);
 
   useEffect(() => {
     if (!initialized) return;
