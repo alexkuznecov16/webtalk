@@ -8,6 +8,8 @@ type ChatParticipantType = {
   name: string;
   username: string;
   avatar_url: string | null;
+  is_online: boolean;
+  last_seen: string | null;
 };
 
 type ChatLastMessageType = {
@@ -47,14 +49,18 @@ type ProfileType = {
   name: string;
   username: string;
   avatar_url: string | null;
+  is_online: boolean;
+  last_seen: string | null;
 } | null;
 
 type AccountType = {
   id: string;
-  email: string;
+  email: string | null;
   name: string;
   username: string;
   avatar_url: string | null;
+  is_online: boolean;
+  last_seen: string | null;
 };
 
 type DatabaseContextType = {
@@ -99,7 +105,7 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
     try {
       const { data, error } = await supabase
         .from('profiles')
-        .select('id, email, name, username, avatar_url')
+        .select('id, email, name, username, avatar_url, is_online, last_seen')
         .eq('id', userId)
         .maybeSingle();
 
@@ -114,13 +120,33 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
     }
   }
 
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const handleBeforeUnload = () => {
+      void supabase
+        .from('profiles')
+        .update({
+          is_online: false,
+          last_seen: new Date().toISOString(),
+        })
+        .eq('id', user.id);
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [user?.id]);
+
   async function getAccounts() {
     try {
       if (!user?.id) return [];
 
       const { data, error } = await supabase
         .from('profiles')
-        .select('id, email, name, username, avatar_url')
+        .select('id, email, name, username, avatar_url, is_online, last_seen')
         .neq('id', user.id);
 
       if (error) {
@@ -174,7 +200,9 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
                 id,
                 name,
                 username,
-                avatar_url
+                avatar_url,
+                is_online,
+                last_seen
               )
               `
             )
@@ -238,6 +266,8 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
               name: otherParticipant.name,
               username: otherParticipant.username,
               avatar_url: otherParticipant.avatar_url,
+              is_online: otherParticipant.is_online,
+              last_seen: otherParticipant.last_seen,
             },
             lastMessage,
             unreadcount: isOpenNow ? 0 : (unreadcount ?? 0),
@@ -477,6 +507,7 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
       }
 
       setUser(data.user);
+      await updateMyOnlineStatus(true, data.user.id);
       await fetchProfile(data.user.id);
       setAuthLoading(false);
       return {};
@@ -506,6 +537,7 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
     }
 
     setUser(data.user);
+    await updateMyOnlineStatus(true, data.user.id);
     await fetchProfile(data.user.id);
     setAuthLoading(false);
     return {};
@@ -538,6 +570,10 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
 
   async function signOut() {
     setAuthLoading(true);
+
+    if (user?.id) {
+      await updateMyOnlineStatus(false, user.id);
+    }
 
     const { error } = await supabase.auth.signOut();
 
@@ -604,6 +640,24 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
           : chat
       )
     );
+  }
+
+  async function updateMyOnlineStatus(isOnline: boolean, userId: string) {
+    try {
+      const { error } = await supabase
+        .from('profiles')
+        .update({
+          is_online: isOnline,
+          last_seen: new Date().toISOString(),
+        })
+        .eq('id', userId);
+
+      if (error) {
+        console.error('updateMyOnlineStatus error:', error);
+      }
+    } catch (error) {
+      console.error('updateMyOnlineStatus unexpected error:', error);
+    }
   }
 
   useEffect(() => {

@@ -7,6 +7,8 @@ type ChatParticipant = {
   name: string;
   username: string;
   avatar_url: string | null;
+  is_online: boolean;
+  last_seen: string | null;
 };
 
 export type ChatMessage = {
@@ -204,16 +206,22 @@ export default function Content({
           <div className={styles.userMeta}>
             <h2 className={styles.userName}>{participant.name}</h2>
             <p className={styles.userUsername}>@{participant.username}</p>
+            <div className={styles.userActivity}>
+              <div
+                className={styles.userActivityIcon}
+                style={{
+                  background: participant.is_online ? '#4ade80' : '#6b7280',
+                  boxShadow: participant.is_online ? '0 0 8px rgba(74, 222, 128, 0.6)' : 'none',
+                }}
+              />
+              <p className={styles.userLastseen}>
+                {participant.is_online ? 'Online now' : 'Last seen recently'}
+              </p>
+            </div>
           </div>
         </div>
 
         <div className={styles.topbarActions}>
-          {/* <button type="button" className={styles.iconButton}>
-            ☎
-          </button>
-          <button type="button" className={styles.iconButton}>
-            ⋮
-          </button> */}
           <button onClick={onBack} className={styles.mobileBack} type="button">
             X
           </button>
