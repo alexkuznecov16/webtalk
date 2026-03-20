@@ -5,6 +5,13 @@ $font-main: 'Poppins', sans-serif;
   margin: 0;
   outline: none;
   text-decoration: none;
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 body {
