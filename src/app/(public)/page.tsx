@@ -12,15 +12,15 @@ import { useRouter } from 'next/navigation';
 
 export default function Landing() {
   const router = useRouter();
-  const { user, authLoading } = useDatabase();
+  const { user, initialized } = useDatabase();
 
   useEffect(() => {
-    if (!authLoading && user) {
+    if (initialized && user) {
       router.replace('/home');
     }
-  }, [authLoading, user, router]);
+  }, [initialized, user, router]);
 
-  if (authLoading) return null;
+  if (!initialized) return null;
 
   return (
     <>

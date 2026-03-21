@@ -94,8 +94,9 @@ export default function Home() {
   }, [selectedChatId, myUserId, clearChatUnread]);
 
   useEffect(() => {
+    if (!initialized || !user?.id) return;
     void getAccounts();
-  }, []);
+  }, [initialized, user?.id]);
 
   useEffect(() => {
     if (!selectedChatId) {
@@ -130,7 +131,7 @@ export default function Home() {
 
   useEffect(() => {
     setActiveChatId(selectedChatId);
-  }, [selectedChatId]);
+  }, [selectedChatId, setActiveChatId]);
 
   useEffect(() => {
     if (!initialized) return;
@@ -198,8 +199,13 @@ export default function Home() {
     setActiveChatId(null);
   };
 
-  if (!initialized) return null;
-  if (!user) return null;
+  if (!initialized) {
+    return <div className={styles.pageLoader}>Loading...</div>;
+  }
+
+  if (!user) {
+    return <div className={styles.pageLoader}>Redirecting...</div>;
+  }
 
   return (
     <div className={`${styles.chatPage} ${selectedChatId ? styles.hasActiveChat : ''}`}>

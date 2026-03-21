@@ -440,16 +440,7 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
         return;
       }
 
-      const currentUser = session?.user ?? null;
-
-      if (!currentUser) {
-        setUser(null);
-        setProfile(null);
-        return;
-      }
-
-      setUser(currentUser);
-      await fetchProfile(currentUser.id);
+      setUser(session?.user ?? null);
     } catch (error) {
       console.error('getCurrentUser unexpected error:', error);
       setUser(null);
@@ -460,28 +451,22 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
+    if (!user?.id) {
+      setProfile(null);
+      return;
+    }
+
+    void fetchProfile(user.id);
+  }, [user?.id]);
+
+  useEffect(() => {
     void getCurrentUser();
 
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      try {
-        if (session?.user) {
-          setUser(session.user);
-
-          try {
-            await fetchProfile(session.user.id);
-          } catch (profileError) {
-            console.error('onAuthStateChange fetchProfile error:', profileError);
-            setProfile(null);
-          }
-        } else {
-          setUser(null);
-          setProfile(null);
-        }
-      } finally {
-        setInitialized(true);
-      }
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      setInitialized(true);
     });
 
     return () => {
