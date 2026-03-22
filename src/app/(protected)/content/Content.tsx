@@ -23,6 +23,8 @@ type ContentProps = {
   participant?: ChatParticipant | null;
   currentUserId: string;
   messages?: ChatMessage[];
+  isLoadingMessages?: boolean;
+  shouldScrollToBottomKey?: number;
   onSendMessage?: (payload: { text: string; file: File | null }) => void;
   onBack?: () => void;
 };
@@ -57,6 +59,8 @@ export default function Content({
   participant,
   currentUserId,
   messages = [],
+  isLoadingMessages = false,
+  shouldScrollToBottomKey = 0,
   onSendMessage,
   onBack,
 }: ContentProps) {
@@ -66,6 +70,7 @@ export default function Content({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const messagesAreaRef = useRef<HTMLDivElement | null>(null);
   const prevMessagesLengthRef = useRef(0);
+  const prevParticipantIdRef = useRef<string | null>(null);
 
   const scrollToBottom = (behavior: ScrollBehavior = 'auto') => {
     if (!messagesAreaRef.current) return;
@@ -76,21 +81,55 @@ export default function Content({
     });
   };
 
-  useLayoutEffect(() => {
-    scrollToBottom('auto');
-  }, [participant?.id]);
+  const isNearBottom = () => {
+    if (!messagesAreaRef.current) return true;
+
+    const { scrollTop, scrollHeight, clientHeight } = messagesAreaRef.current;
+    const distanceFromBottom = scrollHeight - (scrollTop + clientHeight);
+
+    return distanceFromBottom < 80;
+  };
 
   useEffect(() => {
-    const isFirstLoadForChat = prevMessagesLengthRef.current === 0;
-    const behavior: ScrollBehavior = isFirstLoadForChat ? 'auto' : 'smooth';
+    const currentParticipantId = participant?.id ?? null;
+    const isChatChanged = prevParticipantIdRef.current !== currentParticipantId;
+
+    if (isChatChanged) {
+      prevParticipantIdRef.current = currentParticipantId;
+      prevMessagesLengthRef.current = messages.length;
+
+      const frame = requestAnimationFrame(() => {
+        scrollToBottom('auto');
+      });
+
+      return () => cancelAnimationFrame(frame);
+    }
+
+    const hasNewMessage = messages.length > prevMessagesLengthRef.current;
+    const shouldStickToBottom = isNearBottom();
+
+    if (hasNewMessage && shouldStickToBottom) {
+      const frame = requestAnimationFrame(() => {
+        scrollToBottom('smooth');
+      });
+
+      prevMessagesLengthRef.current = messages.length;
+
+      return () => cancelAnimationFrame(frame);
+    }
+
+    prevMessagesLengthRef.current = messages.length;
+  }, [messages, participant?.id]);
+
+  useEffect(() => {
+    if (!shouldScrollToBottomKey) return;
 
     const frame = requestAnimationFrame(() => {
-      scrollToBottom(behavior);
-      prevMessagesLengthRef.current = messages.length;
+      scrollToBottom('smooth');
     });
 
     return () => cancelAnimationFrame(frame);
-  }, [messages, participant?.id]);
+  }, [shouldScrollToBottomKey]);
 
   useEffect(() => {
     if (!selectedFile) {
@@ -227,7 +266,11 @@ export default function Content({
       </header>
 
       <div className={styles.messagesArea} ref={messagesAreaRef}>
-        {messages.length === 0 ? (
+        {isLoadingMessages ? (
+          <div className={styles.chatPlaceholder}>
+            <span>Loading messages...</span>
+          </div>
+        ) : messages.length === 0 ? (
           <div className={styles.chatPlaceholder}>
             <span>Start your conversation</span>
             <p>Send a text message or attach a photo from your gallery</p>
@@ -328,6 +371,26 @@ export default function Content({
           <textarea
             value={text}
             onChange={(event) => setText(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+
+                const trimmedText = text.trim();
+                if (!trimmedText && !selectedFile) return;
+
+                onSendMessage?.({
+                  text: trimmedText,
+                  file: selectedFile,
+                });
+
+                setText('');
+                setSelectedFile(null);
+
+                if (fileInputRef.current) {
+                  fileInputRef.current.value = '';
+                }
+              }
+            }}
             placeholder="Write a message..."
             className={styles.textarea}
             rows={1}

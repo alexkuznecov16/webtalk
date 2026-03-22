@@ -13,6 +13,8 @@ export default function Home() {
 
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messagesLoading, setMessagesLoading] = useState(false);
+  const [scrollToBottomKey, setScrollToBottomKey] = useState(0);
 
   const pendingOptimisticIdsRef = useRef<string[]>([]);
 
@@ -55,11 +57,10 @@ export default function Home() {
 
             if (newMessage.sender_id === myUserId && pendingOptimisticIdsRef.current.length > 0) {
               const optimisticId = pendingOptimisticIdsRef.current[0];
-
               const hasOptimistic = prev.some((msg) => msg.id === optimisticId);
+
               if (hasOptimistic) {
                 pendingOptimisticIdsRef.current.shift();
-
                 return prev.map((msg) => (msg.id === optimisticId ? newMessage : msg));
               }
             }
@@ -101,19 +102,32 @@ export default function Home() {
   useEffect(() => {
     if (!selectedChatId) {
       setMessages([]);
+      setMessagesLoading(false);
       return;
     }
 
     const chatId = selectedChatId;
+    let isCancelled = false;
+
+    setMessages([]);
+    setMessagesLoading(true);
 
     async function loadMessages() {
       const data = await getMessages(chatId);
+
+      if (isCancelled) return;
+
       setMessages(data);
       clearChatUnread(chatId);
+      setMessagesLoading(false);
     }
 
     void loadMessages();
-  }, [selectedChatId, getMessages, clearChatUnread]);
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [selectedChatId]);
 
   useEffect(() => {
     if (!initialized) return;
@@ -166,6 +180,7 @@ export default function Home() {
 
     pendingOptimisticIdsRef.current.push(optimisticId);
     setMessages((prev) => [...prev, optimisticMessage]);
+    setScrollToBottomKey((prev) => prev + 1);
 
     const result = await sendMessage({
       chatId: selectedChatId,
@@ -187,14 +202,20 @@ export default function Home() {
   };
 
   const handleSelectChat = (chatId: string) => {
+    if (chatId === selectedChatId) return;
+
+    setMessages([]);
+    setMessagesLoading(true);
+
     localStorage.setItem('selectedChatId', chatId);
     setSelectedChatId(chatId);
-    setActiveChatId(chatId);
     clearChatUnread(chatId);
   };
 
   const handleCloseChat = () => {
     localStorage.removeItem('selectedChatId');
+    setMessages([]);
+    setMessagesLoading(false);
     setSelectedChatId(null);
     setActiveChatId(null);
   };
@@ -234,9 +255,12 @@ export default function Home() {
 
       <div className={styles.contentSection}>
         <Content
+          key={selectedChatId ?? 'empty-chat'}
           participant={selectedChat?.participant}
           currentUserId={myUserId}
           messages={messages}
+          isLoadingMessages={messagesLoading}
+          shouldScrollToBottomKey={scrollToBottomKey}
           onSendMessage={handleSendMessage}
           onBack={() => handleCloseChat()}
         />
