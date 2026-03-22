@@ -51,6 +51,18 @@ export default function Home() {
         (payload) => {
           const newMessage = payload.new as ChatMessage & { chat_id?: string };
 
+          const isMine = newMessage.sender_id === myUserId;
+          const isCurrentChat = newMessage.chat_id === selectedChatId;
+          const isTabHidden = document.hidden;
+
+          if (!isMine && (!isCurrentChat || isTabHidden) && selectedChat?.participant) {
+            void showBrowserNotification({
+              title: selectedChat.participant.name,
+              body: newMessage.content || '📷 Sent a photo',
+              chatId: newMessage.chat_id!,
+            });
+          }
+
           setMessages((prev) => {
             const exists = prev.some((msg) => msg.id === newMessage.id);
             if (exists) return prev;
@@ -68,7 +80,9 @@ export default function Home() {
             return [...prev, newMessage];
           });
 
-          clearChatUnread(selectedChatId);
+          if (newMessage.chat_id === selectedChatId) {
+            clearChatUnread(selectedChatId);
+          }
         }
       )
       .on(
@@ -120,6 +134,7 @@ export default function Home() {
       setMessages(data);
       clearChatUnread(chatId);
       setMessagesLoading(false);
+      setScrollToBottomKey((prev) => prev + 1);
     }
 
     void loadMessages();

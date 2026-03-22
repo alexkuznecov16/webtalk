@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent, useEffect, useRef, useState, useLayoutEffect } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import styles from './Content.module.scss';
 
@@ -91,6 +91,8 @@ export default function Content({
   };
 
   useEffect(() => {
+    if (isLoadingMessages) return;
+
     const currentParticipantId = participant?.id ?? null;
     const isChatChanged = prevParticipantIdRef.current !== currentParticipantId;
 
@@ -98,38 +100,38 @@ export default function Content({
       prevParticipantIdRef.current = currentParticipantId;
       prevMessagesLengthRef.current = messages.length;
 
-      const frame = requestAnimationFrame(() => {
+      const timeout = setTimeout(() => {
         scrollToBottom('auto');
-      });
+      }, 0);
 
-      return () => cancelAnimationFrame(frame);
+      return () => clearTimeout(timeout);
     }
 
     const hasNewMessage = messages.length > prevMessagesLengthRef.current;
     const shouldStickToBottom = isNearBottom();
 
     if (hasNewMessage && shouldStickToBottom) {
-      const frame = requestAnimationFrame(() => {
+      const timeout = setTimeout(() => {
         scrollToBottom('smooth');
-      });
+      }, 0);
 
       prevMessagesLengthRef.current = messages.length;
 
-      return () => cancelAnimationFrame(frame);
+      return () => clearTimeout(timeout);
     }
 
     prevMessagesLengthRef.current = messages.length;
-  }, [messages, participant?.id]);
+  }, [messages, participant?.id, isLoadingMessages]);
 
   useEffect(() => {
-    if (!shouldScrollToBottomKey) return;
+    if (!shouldScrollToBottomKey || isLoadingMessages) return;
 
-    const frame = requestAnimationFrame(() => {
-      scrollToBottom('smooth');
-    });
+    const timeout = setTimeout(() => {
+      scrollToBottom('auto');
+    }, 0);
 
-    return () => cancelAnimationFrame(frame);
-  }, [shouldScrollToBottomKey]);
+    return () => clearTimeout(timeout);
+  }, [shouldScrollToBottomKey, isLoadingMessages]);
 
   useEffect(() => {
     if (!selectedFile) {
