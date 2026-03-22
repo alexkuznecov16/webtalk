@@ -45,6 +45,14 @@ function getInitials(name: string) {
     .toUpperCase();
 }
 
+function isUserOnline(lastSeen: string | null) {
+  if (!lastSeen) return false;
+
+  const diff = Date.now() - new Date(lastSeen).getTime();
+
+  return diff < 20_000;
+}
+
 export default function Content({
   participant,
   currentUserId,
@@ -79,18 +87,6 @@ export default function Content({
     const frame = requestAnimationFrame(() => {
       scrollToBottom(behavior);
       prevMessagesLengthRef.current = messages.length;
-    });
-
-    return () => cancelAnimationFrame(frame);
-  }, [messages, participant?.id]);
-
-  useLayoutEffect(() => {
-    scrollToBottom('auto');
-  }, [participant?.id]);
-
-  useEffect(() => {
-    const frame = requestAnimationFrame(() => {
-      scrollToBottom('auto');
     });
 
     return () => cancelAnimationFrame(frame);
@@ -210,12 +206,14 @@ export default function Content({
               <div
                 className={styles.userActivityIcon}
                 style={{
-                  background: participant.is_online ? '#4ade80' : '#6b7280',
-                  boxShadow: participant.is_online ? '0 0 8px rgba(74, 222, 128, 0.6)' : 'none',
+                  background: isUserOnline(participant.last_seen) ? '#4ade80' : '#6b7280',
+                  boxShadow: isUserOnline(participant.last_seen)
+                    ? '0 0 8px rgba(74, 222, 128, 0.6)'
+                    : 'none',
                 }}
               />
               <p className={styles.userLastseen}>
-                {participant.is_online ? 'Online now' : 'Last seen recently'}
+                {isUserOnline(participant.last_seen) ? 'Online now' : 'Last seen recently'}
               </p>
             </div>
           </div>

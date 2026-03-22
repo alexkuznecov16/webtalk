@@ -120,26 +120,6 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
     }
   }
 
-  useEffect(() => {
-    if (!user?.id) return;
-
-    const handleBeforeUnload = () => {
-      void supabase
-        .from('profiles')
-        .update({
-          is_online: false,
-          last_seen: new Date().toISOString(),
-        })
-        .eq('id', user.id);
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, [user?.id]);
-
   async function getAccounts() {
     try {
       if (!user?.id) return [];
@@ -492,7 +472,7 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
       }
 
       setUser(data.user);
-      await updateMyOnlineStatus(true, data.user.id);
+      await updateMyOnlineStatus(data.user.id);
       await fetchProfile(data.user.id);
       setAuthLoading(false);
       return {};
@@ -522,7 +502,7 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
     }
 
     setUser(data.user);
-    await updateMyOnlineStatus(true, data.user.id);
+    await updateMyOnlineStatus(data.user.id);
     await fetchProfile(data.user.id);
     setAuthLoading(false);
     return {};
@@ -557,7 +537,7 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
     setAuthLoading(true);
 
     if (user?.id) {
-      await updateMyOnlineStatus(false, user.id);
+      await updateMyOnlineStatus(user.id);
     }
 
     const { error } = await supabase.auth.signOut();
@@ -627,12 +607,11 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
     );
   }
 
-  async function updateMyOnlineStatus(isOnline: boolean, userId: string) {
+  async function updateMyOnlineStatus(userId: string) {
     try {
       const { error } = await supabase
         .from('profiles')
         .update({
-          is_online: isOnline,
           last_seen: new Date().toISOString(),
         })
         .eq('id', userId);
@@ -646,37 +625,70 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
   }
 
   useEffect(() => {
+    if (!user?.id) return;
+
+    const interval = setInterval(() => {
+      void updateMyOnlineStatus(user.id);
+    }, 10000);
+
+    return () => clearInterval(interval);
+  }, [user?.id]);
+
+  useEffect(() => {
     if (!initialized || !user?.id) return;
 
     const channel = supabase
-      .channel(`messages-live-${user.id}`)
+      .channel(`profiles-live-${user.id}`)
       .on(
         'postgres_changes',
         {
-          event: 'INSERT',
+          event: 'UPDATE',
           schema: 'public',
-          table: 'messages',
+          table: 'profiles',
         },
-        async (payload) => {
-          const newMessage = payload.new as {
+        (payload) => {
+          const updatedProfile = payload.new as {
             id: string;
-            chat_id: string;
-            sender_id: string;
-            content: string | null;
-            image_url: string | null;
-            created_at: string;
+            last_seen: string | null;
+            is_online: boolean;
           };
 
-          const { data: membership, error } = await supabase
-            .from('chat_participants')
-            .select('chat_id')
-            .eq('chat_id', newMessage.chat_id)
-            .eq('profile_id', user.id)
-            .maybeSingle();
+          setChats((prev) =>
+            prev.map((chat) =>
+              chat.participant.id === updatedProfile.id
+                ? {
+                    ...chat,
+                    participant: {
+                      ...chat.participant,
+                      last_seen: updatedProfile.last_seen,
+                      is_online: updatedProfile.is_online,
+                    },
+                  }
+                : chat
+            )
+          );
 
-          if (error || !membership) return;
+          setAccounts((prev) =>
+            prev.map((account) =>
+              account.id === updatedProfile.id
+                ? {
+                    ...account,
+                    last_seen: updatedProfile.last_seen,
+                    is_online: updatedProfile.is_online,
+                  }
+                : account
+            )
+          );
 
-          upsertChatPreviewFromMessage(newMessage);
+          setProfile((prev) =>
+            prev && prev.id === updatedProfile.id
+              ? {
+                  ...prev,
+                  last_seen: updatedProfile.last_seen,
+                  is_online: updatedProfile.is_online,
+                }
+              : prev
+          );
         }
       )
       .subscribe();
@@ -684,7 +696,7 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
     return () => {
       void supabase.removeChannel(channel);
     };
-  }, [initialized, user?.id, activeChatId]);
+  }, [initialized, user?.id]);
 
   const value = useMemo(
     () => ({
