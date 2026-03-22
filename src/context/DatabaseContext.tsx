@@ -629,7 +629,7 @@ export function DatabaseProvider({ children }: { children: ReactNode }) {
 
     const interval = setInterval(() => {
       void updateMyOnlineStatus(user.id);
-    }, 10000);
+    }, 30000);
 
     return () => clearInterval(interval);
   }, [user?.id]);

@@ -52,7 +52,7 @@ function isUserOnline(lastSeen: string | null) {
 
   const diff = Date.now() - new Date(lastSeen).getTime();
 
-  return diff < 20_000;
+  return diff < 60_000;
 }
 
 export default function Content({
